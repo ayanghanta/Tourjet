@@ -21,7 +21,10 @@ const tourSchema = new mongoose.Schema({
     required: [true, 'Tour must have a cover image'],
   },
   ortherImages: [String],
-  category: [String],
+  category: {
+    type: [String],
+    set: (item) => item.map((c) => c.toLowerCase()),
+  },
   ratingQuantity: {
     type: Number,
     default: 4.0,

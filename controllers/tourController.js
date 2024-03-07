@@ -1,6 +1,11 @@
 const Tour = require('./../models/tourModel');
 const APIFeatures = require('./../utils/apiFeatures');
 
+// const asyncError = async function () {
+//   try {
+//   } catch (err) {}
+// };
+
 exports.getAlltours = async (req, res, next) => {
   try {
     const apiFeature = new APIFeatures(req.query, Tour.find())
@@ -95,6 +100,35 @@ exports.deleteTour = async (req, res, next) => {
     res.status(500).json({
       ok: false,
       message: 'something went wrong !',
+    });
+  }
+};
+
+// AGGRIGATION
+
+// 1) Get Tours by catagory
+exports.toursByCategory = async (req, res, next) => {
+  try {
+    const tours = await Tour.aggregate([
+      {
+        $unwind: '$category',
+      },
+      {
+        $match: { category: req.params.category },
+      },
+    ]);
+
+    res.status(200).json({
+      ok: true,
+      results: tours.length,
+      data: {
+        tours,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      ok: false,
     });
   }
 };
