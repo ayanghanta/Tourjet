@@ -6,7 +6,7 @@ const tourSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: [true, 'A tour must have a name '],
-    minlenght: [4, 'cake must have a name grater the 4 character'],
+    minlength: [4, 'cake must have a name grater the 4 character'],
   },
   summary: {
     type: String,
