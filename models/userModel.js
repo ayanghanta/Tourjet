@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -24,6 +25,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide your password'],
     minlength: [8, 'Password must be alteast 8 character long'],
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -51,6 +53,23 @@ const userSchema = new mongoose.Schema({
     default: true,
   },
 });
+
+// PRE SAVE- MIDDLEWARE
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+
+  next();
+});
+
+// INSTANCE METHOD
+
+userSchema.methods.checkIsCorrectPassword = async function (inpPassword) {
+  return await bcrypt.compare(inpPassword, this.password);
+};
 
 const User = mongoose.model('User', userSchema);
 

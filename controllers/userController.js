@@ -1,29 +1,6 @@
-const bcrypt = require('bcryptjs');
-
 const User = require('./../models/userModel');
 const catchError = require('./../utils/catchError');
 const AppError = require('./../utils/appError');
-
-exports.singup = catchError(async (req, res, next) => {
-  // get the request body
-  if (req.body.role === 'admin') req.body.role = 'user';
-  console.log(req.body);
-  //hasing the password
-
-  //create account
-  const newUser = await User.create(req.body);
-
-  // sending welcome email
-
-  // send jwt via cookie
-
-  res.status(201).json({
-    ok: true,
-    data: {
-      user: newUser,
-    },
-  });
-});
 
 exports.getAllUsers = catchError(async (req, res, next) => {
   const users = await User.find();
