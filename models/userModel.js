@@ -30,6 +30,8 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please provide tour confirm password'],
     minlength: [8, 'Password must be alteast 8 character long'],
     validate: {
+      // THIS ONLY ON SAVE/CREATE
+
       validator: function (el) {
         return el === this.password;
       },
@@ -43,6 +45,10 @@ const userSchema = new mongoose.Schema({
       message: 'role only either user or guide or lead-guide',
     },
     default: 'user',
+  },
+  active: {
+    type: Boolean,
+    default: true,
   },
 });
 
